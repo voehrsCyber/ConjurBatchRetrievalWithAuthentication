@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "50f26c59-78b7-4052-b7ee-e942c391a314",
+		"name": "DAP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96292cfa-ec38-4631-bb24-494bb3ba98f2",
+						"exec": [
+							"\r",
+							"var encrypted = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(responseBody));\r",
+							"\r",
+							"console.log(`Encrypted value: ${encrypted}`) //if you want to see the value in the console\r",
+							"pm.environment.set(\"token\", encrypted);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "base64",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "22bjmze37zddea1qakjge2xjcvht3rtcvnd2pz5xk6by80m72007mqp"
+				},
+				"url": {
+					"raw": "https://dapmaster.cybr.com/authn/cyberark/host%2Fansible-localhost/authenticate",
+					"protocol": "https",
+					"host": [
+						"dapmaster",
+						"cybr",
+						"com"
+					],
+					"path": [
+						"authn",
+						"cyberark",
+						"host%2Fansible-localhost",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List All objects",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"{{token}}\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://dapmaster.cybr.com/resources/cyberark?kind=variable",
+					"protocol": "https",
+					"host": [
+						"dapmaster",
+						"cybr",
+						"com"
+					],
+					"path": [
+						"resources",
+						"cyberark"
+					],
+					"query": [
+						{
+							"key": "kind",
+							"value": "variable"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Batch Retrieval",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"{{token}}\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://dapmaster.cybr.com/secrets?variable_ids=cyberark:variable:secrets/frontend/nginx_pwd,cyberark:variable:secrets/frontend/nginx_user",
+					"protocol": "https",
+					"host": [
+						"dapmaster",
+						"cybr",
+						"com"
+					],
+					"path": [
+						"secrets"
+					],
+					"query": [
+						{
+							"key": "variable_ids",
+							"value": "cyberark:variable:secrets/frontend/nginx_pwd,cyberark:variable:secrets/frontend/nginx_user"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
